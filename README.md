@@ -1,26 +1,29 @@
-# Lumen PHP Framework
+# criação banco de dados
+> mysql -u root -p
+> CREATE DATABASE orders_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://img.shields.io/packagist/dt/laravel/lumen-framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://img.shields.io/packagist/v/laravel/lumen-framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://img.shields.io/packagist/l/laravel/lumen)](https://packagist.org/packages/laravel/lumen-framework)
+# migração do banco de dados
+> composer require illuminate/console
+> php artisan migrate
+> CREATE USER 'orders_user'@'localhost' IDENTIFIED BY 'OrdersSenha123!';
+> GRANT ALL PRIVILEGES ON orders_db.* TO 'orders_user'@'localhost';
+> FLUSH PRIVILEGES;
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+# subir servidor local
+> php -S localhost:8000 -t public
 
-> **Note:** In the years since releasing Lumen, PHP has made a variety of wonderful performance improvements. For this reason, along with the availability of [Laravel Octane](https://laravel.com/docs/octane), we no longer recommend that you begin new projects with Lumen. Instead, we recommend always beginning new projects with [Laravel](https://laravel.com).
+# criar novas migrações
+> php artisan make:migration create_orders_table --create=orders
 
-## Official Documentation
 
-Documentation for the framework can be found on the [Lumen website](https://lumen.laravel.com/docs).
+        // $pusher = new Pusher(
+        //     env('PUSHER_APP_KEY'),
+        //     env('PUSHER_APP_SECRET'),
+        //     env('PUSHER_APP_ID'),
+        //     [
+        //         'cluster' => env('PUSHER_APP_CLUSTER'),
+        //         'useTLS' => true
+        //     ]
+        // );
 
-## Contributing
-
-Thank you for considering contributing to Lumen! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Lumen, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Lumen framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+        // $pusher->trigger('orders-channel', 'new-order', $order);   

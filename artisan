@@ -17,7 +17,7 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 
 $app = require __DIR__.'/bootstrap/app.php';
 
-/*
+$app->register(Laravel\Lumen\Console\ConsoleServiceProvider::class);/*
 |--------------------------------------------------------------------------
 | Run The Artisan Application
 |--------------------------------------------------------------------------

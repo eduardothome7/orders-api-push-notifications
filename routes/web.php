@@ -17,6 +17,11 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->post('/orders', 'OrderController@create');
+// Salas
+$router->get('/rooms', 'RoomController@index');
+$router->post('/rooms', 'RoomController@create');
+$router->get('/rooms/{id}', 'RoomController@retrieve');
 
-$router->get('/orders', 'OrderController@index');
+// Agendamentos
+$router->get('/events', 'EventController@index');
+$router->post('/events', 'EventController@create');

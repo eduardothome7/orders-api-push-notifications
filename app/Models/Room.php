@@ -45,6 +45,7 @@ class Room extends Model
         $year = (int) $today->format('Y');
         $begginingWeek = (clone $today)->modify("-{$dayOfWeek} days");
         $lastOfWeek = (clone $today)->modify('saturday this week');
+        $todayDayYear = (int) $today->format('z') + 1;
 
         $weekEvents = Event::where('room_id', $this->id)
             ->where('year', $year)
@@ -54,7 +55,21 @@ class Room extends Model
 
         $eventGrid = [];
         foreach ($weekEvents as $event) {
-            $eventGrid[$event['year']][$event['day']][$event['pos']] = $event; 
+
+            $event['cancelable'] = true;
+            if (
+                $event['day'] < $todayDayYear 
+                || 
+                (
+                    $event['day'] == $todayDayYear 
+                    &&
+                    $today->format('H:i') > $event['start_at']
+                )
+            ) {
+                $event['cancelable'] = false;
+            }
+
+            $eventGrid[$event['year']][$event['day']][$event['pos']] = $event;
         }
 
         foreach ($daysWeek as $i => &$dayWeek) {

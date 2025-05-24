@@ -66,9 +66,15 @@ class Room extends Model
             $targetDate->modify("+{$daysToAdd} days");
             $dayWeek['date'] = $targetDate->format('d/m');
 
+            $currentDayOfYear = (int) $targetDate->format('z') + 1;
+
+            $dayWeek['dayYear'] = $currentDayOfYear;
+            $dayWeek['year'] = $year;
+            $dayWeek['pos'] = $pos;
+
             unset($dayWeek['event']);
-            if (! empty($eventGrid[$year][$targetDate->format('z') + 1][$pos])) {
-                $dayWeek['event'] = $eventGrid[$year][$targetDate->format('z') + 1][$pos];
+            if (! empty($eventGrid[$year][$currentDayOfYear][$pos])) {
+                $dayWeek['event'] = $eventGrid[$year][$currentDayOfYear][$pos];
             }
         }
 

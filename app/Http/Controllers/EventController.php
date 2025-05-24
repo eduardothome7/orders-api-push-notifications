@@ -18,16 +18,30 @@ class EventController extends Controller
     {
         $data = $request->only(['room_id', 'pos', 'day', 'year']);
 
-        $items = Event::createWithRoom($data);
+        try {
+            $event = Event::createWithRoom($data);
+            
+            return response()->json($event);
 
-        if (count($items) <> count($data['pos'])) {
+        } catch (\Exception $e) {
+
             return response()->json([
-                'status'  => 'error',
-                'items' => $items,
-                'message' => "Um dos agendamentos não pode ser realizado. Revise e envie novamente"
-            ], 422);
+                'error' => 'Erro ao criar evento',
+                'message' => $e->getMessage(),
+            ], 409);
+        }
+    }
+
+    public function delete($id)
+    {
+        $event = Event::find($id);
+
+        if (!$event) {
+            return response()->json(['error' => 'Evento não encontrado'], 404);
         }
 
-        return response()->json($items);
+        $event->delete();
+
+        return response()->json(['message' => 'Evento deletado com sucesso'], 200);
     }
 }

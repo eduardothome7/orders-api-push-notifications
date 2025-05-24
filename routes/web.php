@@ -25,3 +25,4 @@ $router->get('/rooms/{id}', 'RoomController@retrieve');
 // Agendamentos
 $router->get('/events', 'EventController@index');
 $router->post('/events', 'EventController@create');
+$router->delete('/events/{id}', 'EventController@delete');

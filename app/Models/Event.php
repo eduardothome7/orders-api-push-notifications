@@ -15,29 +15,24 @@ class Event extends Model
         $events = [];
         $grids = $room->grids;
 
-        foreach ($data['pos'] as $i) {
-            $exists = self::where('room_id', $data['room_id'])
-                ->where('day', $data['day'])
-                ->where('pos', $i)
-                ->where('year', $data['year'])
-                ->exists();
-        
-            if ($exists) {
-               continue;
-            }
+        $exists = self::where('room_id', $data['room_id'])
+            ->where('day', $data['day'])
+            ->where('pos', $data['pos'])
+            ->where('year', $data['year'])
+            ->exists();
 
-            foreach ($grids as $j => $grid) {
-                if ($i == $j) {
-                    $data['pos'] = $i;
-                    $data['start_at'] = $grid['starts'];
-                    $data['end_at'] = $grid['ends'];
-                    $data['total'] = $room['price'] * $room['interval'];
+        if ($exists) {
+            throw new \Exception('Já existe um agendamento no horário selecionado.');
+        }
 
-                    $events[] = self::create($data);
-                }
+        foreach ($grids as $j => $grid) {
+            if ($data['pos'] == $j) {
+                $data['start_at'] = $grid['start_at'];
+                $data['end_at'] = $grid['end_at'];
+                $data['total'] = $room['price'] * $room['interval'];
             }
         }
 
-        return $events;
+        return self::create($data);
     }
 }

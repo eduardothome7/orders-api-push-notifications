@@ -57,9 +57,6 @@ class Room extends Model
             $eventGrid[$event['year']][$event['day']][$event['pos']] = $event; 
         }
 
-        // echo $pos;
-        // echo "<br>";
-
         foreach ($daysWeek as $i => &$dayWeek) {
             $targetDate = clone $today;
             $currentDayOfWeek = (int) $today->format('w');

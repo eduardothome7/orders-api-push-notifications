@@ -29,7 +29,7 @@ class Event extends Model
             foreach ($grids as $j => $grid) {
                 if ($i == $j) {
                     $data['pos'] = $i;
-                    $data['start_at'] = $grid['stars'];
+                    $data['start_at'] = $grid['starts'];
                     $data['end_at'] = $grid['ends'];
                     $data['total'] = $room['price'] * $room['interval'];
 

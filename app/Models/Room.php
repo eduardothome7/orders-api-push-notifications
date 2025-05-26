@@ -24,10 +24,11 @@ class Room extends Model
         while ($start + $interval <= $end) {
             $startTime = date('H:i', $start);
             $endTime = date('H:i', $start + $interval);
+
             $grids[] = [
                 'start_at' => $startTime, 
                 'end_at' => $endTime,
-                'days' => $this->getWeek($dayOfWeek, $pos),
+                'days' => $this->getWeek($dayOfWeek, $pos, $startTime),
                 'dayNames' => $this->getDayNames()
             ];
 
@@ -38,7 +39,7 @@ class Room extends Model
         return $grids;
     }
 
-    protected function getWeek(int $dayOfWeek, int $pos)
+    protected function getWeek(int $dayOfWeek, int $pos, $startAt)
     {
         $daysWeek = $this->getDayNames();
         $today = new \DateTime();
@@ -79,13 +80,18 @@ class Room extends Model
             $daysToAdd = ($i - $currentDayOfWeek);
 
             $targetDate->modify("+{$daysToAdd} days");
-            $dayWeek['date'] = $targetDate->format('d/m');
+            $dayWeek['date'] = $targetDate;
 
             $currentDayOfYear = (int) $targetDate->format('z') + 1;
 
             $dayWeek['dayYear'] = $currentDayOfYear;
             $dayWeek['year'] = $year;
             $dayWeek['pos'] = $pos;
+
+            $fullDateTimeString = $targetDate->format("d/m/Y") . " " . $startAt;
+            $fullDateTimeGridElement = \DateTime::createFromFormat('d/m/Y H:i', $fullDateTimeString);
+
+            $dayWeek['editable'] = $fullDateTimeGridElement > $today;
 
             unset($dayWeek['event']);
             if (! empty($eventGrid[$year][$currentDayOfYear][$pos])) {
